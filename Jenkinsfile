@@ -26,8 +26,8 @@ pipeline {
                     def changedFiles = sh(script: 'git diff --name-only HEAD~1', returnStdout: true).trim().split('\n')
                     echo "Changed files: ${changedFiles.join(', ')}" // Debugging line
                     env.UPDATE_NEEDED = changedFiles.any { 
-                        it == 'docker-data/docker-jenkins/conf/dbconfig.inc.php' || 
-                        it == 'docker-data/docker-jenkins/docker-entrypoint.d/30-api-server.sh'
+                        it == '/docker-data/docker-jenkins/conf/dbconfig.inc.php' || 
+                        it == '/docker-data/docker-jenkins/docker-entrypoint.d/30-api-server.sh'
                     } ? 'true' : 'false'
                     echo "Update needed: ${env.UPDATE_NEEDED}" // Debugging line
                 }
