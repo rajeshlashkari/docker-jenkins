@@ -23,7 +23,9 @@ pipeline {
             steps {
                 script {
                     def changedFiles = sh(script: 'git diff --name-only HEAD~1', returnStdout: true).trim().split('\n')
-                    env.UPDATE_NEEDED = changedFiles.any { it == 'dbconfig.inc.php' || it == '30-api-server.sh' } ? 'true' : 'false'
+                    env.UPDATE_NEEDED = changedFiles.any { 
+                        it == '/docker-data/docker-jenkins/conf/dbconfig.inc.php' || it == '/docker-data/docker-jenkins/docker-entrypoint.d/30-api-server.sh' 
+                    } ? 'true' : 'false'
                 }
             }
         }
@@ -33,7 +35,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker build -t myapp:latest /docker-data/docker-jenkins-2'
+                    sh 'docker build -t ocs:2.12.1 /docker-data/docker-jenkins-2'
                 }
             }
         }
@@ -43,12 +45,13 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker run -d --name myapp-container -p 5000:5000 myapp:latest'
+                    sh 'docker run -d --name ocs-server -p 5000:5000 ocs:2.12.1'
                 }
             }
         }
     }
 }
+
 
 
     //post {
