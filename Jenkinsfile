@@ -28,7 +28,7 @@ pipeline {
                     for (changeLog in changeLogSets) {
                         for (entry in changeLog.items) {
                             for (file in entry.affectedFiles) {
-                                if (file.path == 'docker-data/docker-jenkins/conf/dbconfig.inc.php' || file.path == 'docker-data/docker-jenkins/docker-entrypoint.d/30-api-server.sh') {
+                                if (file.path == '/docker-data/docker-jenkins/conf/dbconfig.inc.php' || file.path == '/docker-data/docker-jenkins/docker-entrypoint.d/30-api-server.sh') {
                                     changesFound = true
                                     break
                                 }

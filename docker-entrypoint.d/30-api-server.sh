@@ -4,11 +4,12 @@ if [ ! -z "${OCS_DISABLE_API_MODE}" ] || [ ! -z "${OCS_DISABLE_COM_MODE}" ]; the
 	echo "+---------------------------------------------------------------------------+"
 	echo "| Warning: OCS_DISABLE_API_MODE or OCS_DISABLE_COM_MODE environment         |"
 	echo "| variable is set!                                                          |"
-	echo "| REST API will be DISABLED by rajesh       nn                                |"
+	echo "| REST API will be DISABLED by rajesh                              |"
 	echo "+---------------------------------------------------------------------------+"
 	exit 0
 fi
 
+API_CONF_FILE="/etc/apache2/conf-available/zz-ocsinventory-restapi.conf"
 API_CONF_FILE="/etc/apache2/conf-available/zz-ocsinventory-restapi.conf"
 API_ROUTE=$(perl -e "print \"@INC[2]\"")
 API_ROUTE_LOADER="${API_ROUTE}/Api/Ocsinventory/Restapi/Loader.pm"
