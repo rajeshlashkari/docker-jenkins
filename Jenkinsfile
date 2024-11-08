@@ -20,30 +20,30 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            script {
-                if (env.BRANCH_NAME == 'main') {
-                    sendEmail('SUCCESS')
-                }
-            }
-        }
-        failure {
-            script {
-                if (env.BRANCH_NAME == 'main') {
-                    FAILURE_REASON = currentBuild.rawBuild.getLog(50).join('\n')
-                    sendEmail('FAILURE', FAILURE_REASON)
-                }
-            }
-        }
-        always {
-            script {
-                if (env.BRANCH_NAME == 'main') {
-                    COMMIT_AUTHOR = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
-                }
-            }
-        }
-    }
+    //post {
+    //    success {
+    //        script {
+    //            if (env.BRANCH_NAME == 'main') {
+    //                sendEmail('SUCCESS')
+    //            }
+    //        }
+    //    }
+    //    failure {
+    //        script {
+    //            if (env.BRANCH_NAME == 'main') {
+    //                FAILURE_REASON = currentBuild.rawBuild.getLog(50).join('\n')
+    //                sendEmail('FAILURE', FAILURE_REASON)
+    //            }
+    //        }
+    //    }
+    //    always {
+    //        script {
+    //            if (env.BRANCH_NAME == 'main') {
+    //                COMMIT_AUTHOR = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
+    //            }
+    //        }
+    //    }
+    //}
 }
 
 //def sendEmail(String status, String failureReason = '') {
