@@ -4,7 +4,7 @@ if [ ! -z "${OCS_DISABLE_API_MODE}" ] || [ ! -z "${OCS_DISABLE_COM_MODE}" ]; the
 	echo "+---------------------------------------------------------------------------+"
 	echo "| Warning: OCS_DISABLE_API_MODE or OCS_DISABLE_COM_MODE environment         |"
 	echo "| variable is set!                                                          |"
-	echo "| REST API will be DISABLED by rajesh                                       |"
+	echo "| REST API will be DISABLED by rajesh       nn                                |"
 	echo "+---------------------------------------------------------------------------+"
 	exit 0
 fi
