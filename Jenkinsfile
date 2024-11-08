@@ -62,7 +62,7 @@ pipeline {
     //        }
     //    }
     //}
-}
+//}
 
 //def sendEmail(String status, String failureReason = '') {
 //    def buildDuration = currentBuild.durationString ?: 'N/A'
