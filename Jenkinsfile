@@ -19,24 +19,37 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
-            when { branch 'main' }
+        stage('Check for Updates') {
             steps {
                 script {
-                    sh 'docker build -t ocs:2.12.1 /docker-data/docker-jenkins-2'
+                    def changedFiles = sh(script: 'git diff --name-only HEAD~1', returnStdout: true).trim().split('\n')
+                    env.UPDATE_NEEDED = changedFiles.any { it == 'dbconfig.inc.php' || it == '30-api-server.sh' } ? 'true' : 'false'
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            when {
+                expression { return env.UPDATE_NEEDED == 'true' }
+            }
+            steps {
+                script {
+                    sh 'docker build -t myapp:latest /docker-data/docker-jenkins-2'
                 }
             }
         }
         stage('Run Docker Container') {
-            when { branch 'main' }
+            when {
+                expression { return env.UPDATE_NEEDED == 'true' }
+            }
             steps {
                 script {
-                    sh 'docker run -d --name ocs-server -p 5000:5000 ocs:2.12.1'
+                    sh 'docker run -d --name myapp-container -p 5000:5000 myapp:latest'
                 }
             }
         }
     }
 }
+
 
     //post {
     //    success {
