@@ -3,7 +3,6 @@ pipeline {
     environment {
         COMMIT_AUTHOR = ''
         FAILURE_REASON = ''
-        UPDATE_NEEDED = 'false'
     }
     stages {
         stage('Clone Repository') {
@@ -23,13 +22,21 @@ pipeline {
         stage('Check for Updates') {
             steps {
                 script {
-                    def changedFiles = sh(script: 'git diff --name-only HEAD~1', returnStdout: true).trim().split('\n')
-                    echo "Changed files: ${changedFiles.join(', ')}" // Debugging line
-                    env.UPDATE_NEEDED = changedFiles.any { 
-                        it == '/docker-data/docker-jenkins/conf/dbconfig.inc.php' || 
-                        it == '/docker-data/docker-jenkins/docker-entrypoint.d/30-api-server.sh'
-                    } ? 'true' : 'false'
-                    echo "Update needed: ${env.UPDATE_NEEDED}" // Debugging line
+                    def changeLogSets = currentBuild.changeSets
+                    def changesFound = false
+
+                    for (changeLog in changeLogSets) {
+                        for (entry in changeLog.items) {
+                            for (file in entry.affectedFiles) {
+                                if (file.path == 'docker-data/docker-jenkins/conf/dbconfig.inc.php' || file.path == 'docker-data/docker-jenkins/docker-entrypoint.d/30-api-server.sh') {
+                                    changesFound = true
+                                    break
+                                }
+                            }
+                        }
+                    }
+                    env.UPDATE_NEEDED = changesFound ? 'true' : 'false'
+                    echo "Changes found: ${env.UPDATE_NEEDED}" // Debugging line
                 }
             }
         }
@@ -55,6 +62,7 @@ pipeline {
         }
     }
 }
+
 
 
 
