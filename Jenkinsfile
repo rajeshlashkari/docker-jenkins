@@ -19,7 +19,25 @@ pipeline {
                 }
             }
         }
+        stage('Build Docker Image') {
+            when { branch 'main' }
+            steps {
+                script {
+                    sh 'docker build -t ocs:2.12.1 /docker-data/docker-jenkins-2'
+                }
+            }
+        }
+        stage('Run Docker Container') {
+            when { branch 'main' }
+            steps {
+                script {
+                    sh 'docker run -d --name ocs-server -p 5000:5000 ocs:2.12.1'
+                }
+            }
+        }
     }
+}
+
     //post {
     //    success {
     //        script {
