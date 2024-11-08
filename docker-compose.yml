@@ -1,0 +1,92 @@
+version: '3.4'
+
+services:
+  ocsapplication:
+    #image: ocsinventory/ocsinventory-docker-image:2.12.1
+    image: ocs:2.12.1
+    #image: rajeshatharva88/ocsinventory-2.11:latest
+    container_name : ocsinventory-server
+    restart: always
+#    expose:
+#      - "80"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /docker-data/ocs/2.12.1/ocsdata/perlcomdata:/etc/ocsinventory-server
+      - /docker-data/ocs/2.12.1/ocsdata/ocsreportsdata:/usr/share/ocsinventory-reports/ocsreports
+      - /docker-data/ocs/2.12.1/ocsdata/varlibdata:/var/lib/ocsinventory-reports
+      - /docker-data/ocs/2.12.1/ocsdata/httpdconfdata:/etc/apache2/conf-available
+      - /docker-data/ocs/2.12.1/ocsdata/profilesconfdata:/usr/share/ocsinventory-reports/ocsreports/config/profiles
+    environment:
+      OCS_DB_SERVER: 192.168.31.191
+      OCS_DB_USER: ocs
+      OCS_DB_PASS: ocsweb
+      OCS_DB_NAME: ocsweb
+      # See documentation to set up SSL for MySQL
+      OCS_SSL_ENABLED: 0
+      OCS_DBI_PRINT_ERROR: 0
+#    links:
+#      - ocsdb
+    networks:
+      - ocs
+#    depends_on:
+#      - ocsdb    
+
+#  ocsdb :
+#    image : mysql:8.0
+#    container_name : ocsinventory-db
+#    restart: always
+#    expose :
+#      - "3306"
+#    volumes :
+#      - ./sql/:/docker-entrypoint-initdb.d/
+#      - sqldata:/var/lib/mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD : rootpass
+#      MYSQL_USER : ocsuser
+#      MYSQL_PASSWORD : ocspass
+#      MYSQL_DATABASE : ocsweb
+#    networks:
+#      - localocs
+
+#  ocsproxy:
+#    image: nginx
+#    container_name: ocsinventory-proxy
+#    restart: always
+#    ports:
+#      - 80:80
+#      - 443:443
+#    volumes:
+#      - ./nginx/conf:/etc/nginx/templates
+#      - ./nginx/certs:/etc/nginx/certs
+#      - ./nginx/auth:/etc/nginx/auth
+#    environment:
+#      # 80 or 443
+#      LISTEN_PORT: 80
+#      # empty or ssl
+#      PORT_TYPE: ""
+#      SSL_CERT: ocs-dummy.crt
+#      SSL_KEY: ocs-dummy.key
+#      # OCS Api user restriction (default ocsapi/ocapi)
+#      API_AUTH_FILE: ocsapi.htpasswd
+#      # OCS Download
+#      READ_TIMEOUT: 300
+#      CONNECT_TIMEOUT: 300
+#      SEND_TIMEOUT: 300
+#      MAX_BODY_SIZE: 1G
+#    depends_on:
+#      - ocsapplication
+#    networks:
+#     - localocs
+  
+networks:
+  ocs:
+
+#volumes:
+#  perlcomdata:
+#  ocsreportsdata:
+#  varlibdata:
+#  httpdconfdata:
+##  sqldata:
+#  profilesconfdata:
